@@ -8,7 +8,7 @@
 import UIKit
 
 class AppsPageController: BaseListController, UICollectionViewDelegateFlowLayout {
-
+    
     let cellID = "id123"
     let headerID = "headerID"
     
@@ -33,7 +33,7 @@ class AppsPageController: BaseListController, UICollectionViewDelegateFlowLayout
         
         fetchData()
     }
-
+    
     var socialApp = [SocialApp]()
     
     var groups = [AppGroup]()
@@ -130,5 +130,5 @@ class AppsPageController: BaseListController, UICollectionViewDelegateFlowLayout
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
         return .init(top: 16, left: 0, bottom: 0, right: 0)
     }
-
+    
 }

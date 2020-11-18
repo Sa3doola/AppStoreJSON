@@ -32,6 +32,7 @@ class AppsHorizontalController: BaseListController, UICollectionViewDelegateFlow
         let height = (view.frame.height  - 2 * topBottomPadding - 2 * lineSpacing) / 3
         return .init(width: view.frame.width - 48, height: height)
     }
+    
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
         return lineSpacing
     }
@@ -47,7 +48,7 @@ class AppsHorizontalController: BaseListController, UICollectionViewDelegateFlow
         cell.nameLabel.text = app?.name
         cell.companyName.text = app?.artistName
         cell.imageView.sd_setImage(with: URL(string:
-            app?.artworkUrl100 ?? ""))
+                                                app?.artworkUrl100 ?? ""))
         
         return cell
     }

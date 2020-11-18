@@ -7,13 +7,13 @@
 
 import Foundation
 
-struct SearchResult: Decodable {
+struct SearchResult: Codable {
     
     let resultCount: Int
     let results: [Result]
 }
 
-struct Result: Decodable {
+struct Result: Codable {
     
     let trackName: String
     let primaryGenreName: String
