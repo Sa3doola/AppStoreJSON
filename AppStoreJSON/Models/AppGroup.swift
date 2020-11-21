@@ -18,5 +18,5 @@ struct Feed: Codable {
 }
 
 struct FeedResult: Codable {
-    let name, artistName, artworkUrl100: String
+    let id, name, artistName, artworkUrl100: String
 }

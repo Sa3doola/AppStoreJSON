@@ -27,7 +27,6 @@ class AppsPageController: BaseListController, UICollectionViewDelegateFlowLayout
         collectionView.register(AppsGroupCell.self, forCellWithReuseIdentifier: cellID)
         
         collectionView.register(AppsPageHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: headerID)
-        
         view.addSubview(activityInddicatorView)
         activityInddicatorView.fillSuperview()
         
@@ -91,7 +90,6 @@ class AppsPageController: BaseListController, UICollectionViewDelegateFlowLayout
         
     }
     
-    
     override func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
         let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: headerID, for: indexPath) as! AppsPageHeader
         header.appHeaderHorizontralController.soicalApps = socialApp
@@ -119,6 +117,13 @@ class AppsPageController: BaseListController, UICollectionViewDelegateFlowLayout
         
         cell.titleLabel.text = appGroup.feed.title
         cell.horizontalController.appGroup = appGroup
+        cell.horizontalController.didSelectHandler = { [weak self] feedResult in
+            
+            let detailController = AppDetailController()
+            detailController.appId = feedResult.id
+            detailController.navigationItem.title = feedResult.name
+            self?.navigationController?.pushViewController(detailController, animated: true)
+        }
         DispatchQueue.main.async {
             cell.horizontalController.collectionView.reloadData()
         }

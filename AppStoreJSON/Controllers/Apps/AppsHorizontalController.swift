@@ -12,6 +12,7 @@ class AppsHorizontalController: HorizontalSnappingController, UICollectionViewDe
     let cellId = "cellId"
     
     var appGroup: AppGroup?
+    var didSelectHandler: ((FeedResult) -> ())?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -22,6 +23,13 @@ class AppsHorizontalController: HorizontalSnappingController, UICollectionViewDe
     
     let topBottomPadding: CGFloat = 12
     let lineSpacing: CGFloat = 10
+    
+    override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        if let app = appGroup?.feed.results[indexPath.row] {
+            didSelectHandler?(app)
+        }
+        
+    }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         let height = (view.frame.height  - 2 * topBottomPadding - 2 * lineSpacing) / 3
