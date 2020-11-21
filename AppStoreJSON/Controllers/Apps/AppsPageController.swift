@@ -70,8 +70,6 @@ class AppsPageController: BaseListController, UICollectionViewDelegateFlowLayout
             self.socialApp = apps ?? []
         }
         
-        
-        
         // completion
         dispatchGroup.notify(queue: .main) {
             print("Completed your dispatch group tasks....")
