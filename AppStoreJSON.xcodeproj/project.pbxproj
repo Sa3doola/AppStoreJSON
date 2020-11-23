@@ -21,6 +21,8 @@
 		D95CC139256906A2000B600D /* HorizontalSnappingController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D95CC138256906A2000B600D /* HorizontalSnappingController.swift */; };
 		D95FF03C256ABC6F00C5AC2F /* TodayController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D95FF03B256ABC6F00C5AC2F /* TodayController.swift */; };
 		D95FF041256ABD8800C5AC2F /* TodayCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D95FF040256ABD8800C5AC2F /* TodayCell.swift */; };
+		D95FF045256AD98200C5AC2F /* AppFullScreenController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D95FF044256AD98200C5AC2F /* AppFullScreenController.swift */; };
+		D95FF048256ADC7C00C5AC2F /* AppFullscreenCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D95FF047256ADC7C00C5AC2F /* AppFullscreenCell.swift */; };
 		D986F2A52563F0B200995F18 /* Service.swift in Sources */ = {isa = PBXBuildFile; fileRef = D986F2A42563F0B200995F18 /* Service.swift */; };
 		D9A13CAF2564125D00A817A7 /* AppsPageController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9A13CAE2564125D00A817A7 /* AppsPageController.swift */; };
 		D9A13CB2256414D400A817A7 /* BaseListController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9A13CB1256414D400A817A7 /* BaseListController.swift */; };
@@ -62,6 +64,8 @@
 		D95CC138256906A2000B600D /* HorizontalSnappingController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HorizontalSnappingController.swift; sourceTree = "<group>"; };
 		D95FF03B256ABC6F00C5AC2F /* TodayController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodayController.swift; sourceTree = "<group>"; };
 		D95FF040256ABD8800C5AC2F /* TodayCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodayCell.swift; sourceTree = "<group>"; };
+		D95FF044256AD98200C5AC2F /* AppFullScreenController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppFullScreenController.swift; sourceTree = "<group>"; };
+		D95FF047256ADC7C00C5AC2F /* AppFullscreenCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppFullscreenCell.swift; sourceTree = "<group>"; };
 		D986F2A42563F0B200995F18 /* Service.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Service.swift; sourceTree = "<group>"; };
 		D9A13CAE2564125D00A817A7 /* AppsPageController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppsPageController.swift; sourceTree = "<group>"; };
 		D9A13CB1256414D400A817A7 /* BaseListController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseListController.swift; sourceTree = "<group>"; };
@@ -145,6 +149,7 @@
 			isa = PBXGroup;
 			children = (
 				D95FF03B256ABC6F00C5AC2F /* TodayController.swift */,
+				D95FF044256AD98200C5AC2F /* AppFullScreenController.swift */,
 			);
 			path = Today;
 			sourceTree = "<group>";
@@ -153,6 +158,7 @@
 			isa = PBXGroup;
 			children = (
 				D95FF040256ABD8800C5AC2F /* TodayCell.swift */,
+				D95FF047256ADC7C00C5AC2F /* AppFullscreenCell.swift */,
 			);
 			path = Today;
 			sourceTree = "<group>";
@@ -415,6 +421,7 @@
 				D9C80F89256481280003FA0E /* SocialApp.swift in Sources */,
 				D9A13CAF2564125D00A817A7 /* AppsPageController.swift in Sources */,
 				D9C80F82256449340003FA0E /* AppGroup.swift in Sources */,
+				D95FF045256AD98200C5AC2F /* AppFullScreenController.swift in Sources */,
 				D95FF041256ABD8800C5AC2F /* TodayCell.swift in Sources */,
 				D9C80F75256430E40003FA0E /* Extentions.swift in Sources */,
 				D9ABBB6D25615C3700D8A421 /* 05_UIView+Layout.swift in Sources */,
@@ -439,6 +446,7 @@
 				D900DCD42569D1AC00648EF7 /* ReviewRowCell.swift in Sources */,
 				D9A13CBC25641DD800A817A7 /* AppsHorizontalController.swift in Sources */,
 				D9ABBB702561610A00D8A421 /* VerticalStackView.swift in Sources */,
+				D95FF048256ADC7C00C5AC2F /* AppFullscreenCell.swift in Sources */,
 				D9C80F7C25643C4A0003FA0E /* AppsHeaderHorizontalController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
