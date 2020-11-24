@@ -40,15 +40,20 @@ class TodayController: BaseListController, UICollectionViewDelegateFlowLayout {
         return .init(top: 32, left: 0, bottom: 32, right: 0)
     }
     
-    var appFullscreenController: UIViewController!
+    var appFullscreenController: AppFullScreenController!
+    
+    var topConstraint: NSLayoutConstraint?
+    var leadingConstraint: NSLayoutConstraint?
+    var widthConstraint: NSLayoutConstraint?
+    var heightConstraint: NSLayoutConstraint?
     
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         
         let appFullscreenController = AppFullScreenController()
-        let redView = appFullscreenController.view!
-        redView.layer.cornerRadius = 16
-        redView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handelRemoveRedView)))
-        view.addSubview(redView)
+        let fullscreenView = appFullscreenController.view!
+        
+        fullscreenView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handelRemoveRedView)))
+        view.addSubview(fullscreenView)
         
         addChild(appFullscreenController)
         
@@ -59,28 +64,51 @@ class TodayController: BaseListController, UICollectionViewDelegateFlowLayout {
         guard let startingFrame = cell.superview?.convert(cell.frame, to: nil) else { return }
         self.startingFrame = startingFrame
         
-        redView.frame = startingFrame
+        fullscreenView.translatesAutoresizingMaskIntoConstraints = false
+        topConstraint = fullscreenView.topAnchor.constraint(equalTo: view.topAnchor, constant: startingFrame.origin.y)
+        leadingConstraint = fullscreenView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: startingFrame.origin.x)
+        widthConstraint = fullscreenView.widthAnchor.constraint(equalToConstant: startingFrame.width)
+        heightConstraint = fullscreenView.heightAnchor.constraint(equalToConstant: startingFrame.height)
         
-        //frames aren't reliable enough for animations
+        [topConstraint, leadingConstraint, widthConstraint, heightConstraint].forEach({$0?.isActive = true})
+        
+        self.view.layoutIfNeeded()
+        
+        fullscreenView.layer.cornerRadius = 16
         
         UIView.animate(withDuration: 0.7, delay: 0, usingSpringWithDamping: 0.7, initialSpringVelocity: 0.7, options: .curveEaseOut, animations: {
-            redView.frame = self.view.frame
+            
+            self.topConstraint?.constant = 0
+            self.leadingConstraint?.constant = 0
+            self.widthConstraint?.constant = self.view.frame.width
+            self.heightConstraint?.constant = self.view.frame.height
+            
+            self.view.layoutIfNeeded()
             
         }, completion: nil)
     }
     
     var startingFrame: CGRect?
     
-    @objc func handelRemoveRedView(gesture: UIGestureRecognizer) {
+    @objc func handelRemoveRedView() {
         
         // access starting frame
         UIView.animate(withDuration: 0.7, delay: 0, usingSpringWithDamping: 0.7, initialSpringVelocity: 0.7, options: .curveEaseOut, animations: {
-            gesture.view?.frame = self.startingFrame ?? .zero
+            
+            self.appFullscreenController.tableView.contentOffset = .zero
+            
+            guard let startingFrame = self.startingFrame else { return }
+            
+            self.topConstraint?.constant = startingFrame.origin.y
+            self.leadingConstraint?.constant = startingFrame.origin.x
+            self.widthConstraint?.constant = startingFrame.width
+            self.heightConstraint?.constant = startingFrame.height
+            
+            self.view.layoutIfNeeded()
+            
         }, completion: { _ in
-            gesture.view?.removeFromSuperview()
+            self.appFullscreenController.view.removeFromSuperview()
             self.appFullscreenController.removeFromParent()
         })
     }
-    
-    
 }
