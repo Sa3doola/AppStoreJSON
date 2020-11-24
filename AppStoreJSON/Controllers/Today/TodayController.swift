@@ -11,6 +11,13 @@ class TodayController: BaseListController, UICollectionViewDelegateFlowLayout {
     
     let toCellID = "toCellID"
     
+    let items = [
+        TodayItem.init(category: "LIFE BETTER", title: "Utilizing your Time", image: #imageLiteral(resourceName: "Image"), description: "All the tools and apps you need to intelligently organize your life to right way.", backgroundColor: .white),
+        
+        TodayItem.init(category: "HOLIDAYS", title: "Travel on Budget", image: #imageLiteral(resourceName: "Holiday"), description: "All the tools and apps you need to intelligently organize your life to right way.", backgroundColor: #colorLiteral(red: 0.9834888577, green: 0.9667972922, blue: 0.7200905681, alpha: 1))
+
+    ]
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -20,11 +27,12 @@ class TodayController: BaseListController, UICollectionViewDelegateFlowLayout {
     }
     
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 4
+        return items.count
     }
     
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: toCellID, for: indexPath) as! TodayCell
+        cell.todayItem = items[indexPath.item]
         return cell
     }
     
@@ -37,7 +45,7 @@ class TodayController: BaseListController, UICollectionViewDelegateFlowLayout {
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
-        return .init(top: 32, left: 0, bottom: 32, right: 0)
+        return .init(top: 24, left: 0, bottom: 24, right: 0)
     }
     
     var appFullscreenController: AppFullScreenController!
@@ -50,14 +58,19 @@ class TodayController: BaseListController, UICollectionViewDelegateFlowLayout {
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         
         let appFullscreenController = AppFullScreenController()
+        appFullscreenController.todayItem = items[indexPath.item]
+        appFullscreenController.dismisshandler = {
+            self.handelRemoveFullscreen()
+        }
         let fullscreenView = appFullscreenController.view!
-        
-        fullscreenView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handelRemoveRedView)))
+        fullscreenView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handelRemoveFullscreen)))
         view.addSubview(fullscreenView)
         
         addChild(appFullscreenController)
         
         self.appFullscreenController = appFullscreenController
+        
+        self.collectionView.isUserInteractionEnabled = false
         
         guard let cell = collectionView.cellForItem(at: indexPath) else { return }
         // absolute coordindates of cell
@@ -85,12 +98,17 @@ class TodayController: BaseListController, UICollectionViewDelegateFlowLayout {
             
             self.view.layoutIfNeeded()
             
+            guard let cell = self.appFullscreenController.tableView.cellForRow(at: [0,0]) as? AppFullscreenHeaderCell else { return }
+            
+            cell.todayCell.topConstraint?.constant = 48
+            cell.layoutIfNeeded()
+            
         }, completion: nil)
     }
     
     var startingFrame: CGRect?
     
-    @objc func handelRemoveRedView() {
+    @objc func handelRemoveFullscreen() {
         
         // access starting frame
         UIView.animate(withDuration: 0.7, delay: 0, usingSpringWithDamping: 0.7, initialSpringVelocity: 0.7, options: .curveEaseOut, animations: {
@@ -106,9 +124,15 @@ class TodayController: BaseListController, UICollectionViewDelegateFlowLayout {
             
             self.view.layoutIfNeeded()
             
+            guard let cell = self.appFullscreenController.tableView.cellForRow(at: [0,0]) as? AppFullscreenHeaderCell else { return }
+            
+            cell.todayCell.topConstraint?.constant = 24
+            cell.layoutIfNeeded()
+            
         }, completion: { _ in
             self.appFullscreenController.view.removeFromSuperview()
             self.appFullscreenController.removeFromParent()
+            self.collectionView.isUserInteractionEnabled = true
         })
     }
 }
