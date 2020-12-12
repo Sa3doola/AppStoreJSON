@@ -9,23 +9,74 @@ import UIKit
 
 class TodayController: BaseListController, UICollectionViewDelegateFlowLayout {
     
-//    let toCellID = "toCellID"
-//    let mutipleCellID = "mutipleCellID"
+    //    let toCellID = "toCellID"
+    //    let mutipleCellID = "mutipleCellID"
     
-    let items = [
-        TodayItem.init(category: "LIFE BETTER", title: "Utilizing your Time", image: #imageLiteral(resourceName: "Image"), description: "All the tools and apps you need to intelligently organize your life to right way.", backgroundColor: .white, cellType: .single),
-        TodayItem.init(category: "The DAILY LIST", title: "Test-Drive These CarPlay Apps", image: #imageLiteral(resourceName: "Image"), description: "", backgroundColor: .white, cellType: .multiple),
-        TodayItem.init(category: "HOLIDAYS", title: "Travel on Budget", image: #imageLiteral(resourceName: "Holiday"), description: "All the tools and apps you need to intelligently organize your life to right way.", backgroundColor: #colorLiteral(red: 0.9834888577, green: 0.9667972922, blue: 0.7200905681, alpha: 1), cellType: .single)
-
-    ]
+    //    let items = [
+    //        TodayItem.init(category: "LIFE BETTER", title: "Utilizing your Time", image: #imageLiteral(resourceName: "Image"), description: "All the tools and apps you need to intelligently organize your life to right way.", backgroundColor: .white, cellType: .single),
+    //        TodayItem.init(category: "The DAILY LIST", title: "Test-Drive These CarPlay Apps", image: #imageLiteral(resourceName: "Image"), description: "", backgroundColor: .white, cellType: .multiple),
+    //        TodayItem.init(category: "HOLIDAYS", title: "Travel on Budget", image: #imageLiteral(resourceName: "Holiday"), description: "All the tools and apps you need to intelligently organize your life to right way.", backgroundColor: #colorLiteral(red: 0.9834888577, green: 0.9667972922, blue: 0.7200905681, alpha: 1), cellType: .single),
+    //        TodayItem.init(category: "MUITIPLE Cell", title: "Test-Drive These CarPlay Apps", image: #imageLiteral(resourceName: "Image"), description: "", backgroundColor: .white, cellType: .multiple)
+    //
+    //    ]
+    
+    var items = [TodayItem]()
+    
+    let activityInddicatorView: UIActivityIndicatorView = {
+        let aiv = UIActivityIndicatorView(style: .large)
+        aiv.color = .darkGray
+        aiv.startAnimating()
+        aiv.hidesWhenStopped = true
+        return aiv
+    }()
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        view.addSubview(activityInddicatorView)
+        activityInddicatorView.centerInSuperview()
+        
+        fetchData()
         
         collectionView.backgroundColor = .secondarySystemBackground
         
         collectionView.register(TodayCell.self, forCellWithReuseIdentifier: TodayItem.Celltype.single.rawValue)
         collectionView.register(TodayMutipleAppCell.self, forCellWithReuseIdentifier: TodayItem.Celltype.multiple.rawValue)
+    }
+    
+    fileprivate func fetchData() {
+        //dispatchGroup
+        
+        let dispatchGroup = DispatchGroup()
+        
+        var topGrossingGroup: AppGroup?
+        var gamesGroup: AppGroup?
+        
+        dispatchGroup.enter()
+        Service.shared.fetchTopGrossing { (appGroup, error) in
+            topGrossingGroup = appGroup
+            dispatchGroup.leave()
+        }
+        
+        dispatchGroup.enter()
+        Service.shared.fetchGames { (appGroup, error) in
+            gamesGroup = appGroup
+            dispatchGroup.leave()
+        }
+        
+        //completion block
+        dispatchGroup.notify(queue: .main) {
+            self.activityInddicatorView.stopAnimating()
+            print("Finished fetching")
+            
+            self.items = [
+                TodayItem.init(category: "The DAILY LIST", title: topGrossingGroup?.feed.title ?? "", image: #imageLiteral(resourceName: "Image"), description: "", backgroundColor: .white, cellType: .multiple, apps: topGrossingGroup?.feed.results ?? []),
+                TodayItem.init(category: "LIFE BETTER", title: "Utilizing your Time", image: #imageLiteral(resourceName: "Image"), description: "All the tools and apps you need to intelligently organize your life to right way.", backgroundColor: .white, cellType: .single, apps: []),
+                TodayItem.init(category: "The DAILY LIST", title: gamesGroup?.feed.title ?? "", image: #imageLiteral(resourceName: "Image"), description: "", backgroundColor: .white, cellType: .multiple, apps: gamesGroup?.feed.results ?? [])
+            ]
+            
+            self.collectionView.reloadData()
+        }
     }
     
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -39,20 +90,9 @@ class TodayController: BaseListController, UICollectionViewDelegateFlowLayout {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellID, for: indexPath) as! BaseTodayCell
         
         cell.todayItem = items[indexPath.item]
-
-        
+    
         return cell
-        
-//        if indexPath.item == 0 {
-//            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: mutipleCellID, for: indexPath) as! TodayMutipleAppCell
-//            cell.todayItem = items[indexPath.item]
-//            return cell
-//
-//        }
-//
-//        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: toCellID, for: indexPath) as! TodayCell
-//        cell.todayItem = items[indexPath.item]
-//        return cell
+
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {

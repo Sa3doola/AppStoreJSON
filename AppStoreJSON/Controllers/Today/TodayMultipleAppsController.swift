@@ -32,7 +32,6 @@ class TodayMultipleAppsController: BaseListController, UICollectionViewDelegateF
                 self?.collectionView.reloadData()
             }
         }
-        
     }
     
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {

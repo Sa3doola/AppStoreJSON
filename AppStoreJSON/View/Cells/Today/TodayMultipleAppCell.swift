@@ -13,6 +13,8 @@ class TodayMutipleAppCell: BaseTodayCell {
         didSet {
             categoryLabel.text = todayItem.category
             titleLabel.text = todayItem.title
+            mutipleAppsController.results = todayItem.apps
+            mutipleAppsController.collectionView.reloadData()
             backgroundColor = todayItem.backgroundColor
         }
     }
