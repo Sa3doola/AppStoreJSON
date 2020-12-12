@@ -13,7 +13,7 @@ class TodayMutipleAppCell: BaseTodayCell {
         didSet {
             categoryLabel.text = todayItem.category
             titleLabel.text = todayItem.title
-            mutipleAppsController.results = todayItem.apps
+            mutipleAppsController.apps = todayItem.apps
             mutipleAppsController.collectionView.reloadData()
             backgroundColor = todayItem.backgroundColor
         }
@@ -23,7 +23,7 @@ class TodayMutipleAppCell: BaseTodayCell {
     
     let titleLabel = UILabel(text: "Utilizing your Time", font: .boldSystemFont(ofSize: 30), numberOfLines: 2)
     
-    let mutipleAppsController = TodayMultipleAppsController()
+    let mutipleAppsController = TodayMultipleAppsController(mode: .small)
     
     override init(frame: CGRect) {
         super.init(frame: frame)
