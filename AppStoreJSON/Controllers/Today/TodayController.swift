@@ -73,9 +73,9 @@ class TodayController: BaseListController, UICollectionViewDelegateFlowLayout, U
             print("Finished fetching")
             
             self.items = [
-                TodayItem.init(category: "The DAILY LIST", title: topGrossingGroup?.feed.title ?? "", image: #imageLiteral(resourceName: "Image"), description: "", backgroundColor: .white, cellType: .multiple, apps: topGrossingGroup?.feed.results ?? []),
-                TodayItem.init(category: "LIFE BETTER", title: "Utilizing your Time", image: #imageLiteral(resourceName: "Image"), description: "All the tools and apps you need to intelligently organize your life to right way.", backgroundColor: .white, cellType: .single, apps: []),
-                TodayItem.init(category: "The DAILY LIST", title: gamesGroup?.feed.title ?? "", image: #imageLiteral(resourceName: "Image"), description: "", backgroundColor: .white, cellType: .multiple, apps: gamesGroup?.feed.results ?? []),
+                TodayItem.init(category: "The DAILY LIST", title: topGrossingGroup?.feed.title ?? "", image: #imageLiteral(resourceName: "Image"), description: "", backgroundColor: .systemBackground, cellType: .multiple, apps: topGrossingGroup?.feed.results ?? []),
+                TodayItem.init(category: "LIFE BETTER", title: "Utilizing your Time", image: #imageLiteral(resourceName: "Image"), description: "All the tools and apps you need to intelligently organize your life to right way.", backgroundColor: .systemBackground, cellType: .single, apps: []),
+                TodayItem.init(category: "The DAILY LIST", title: gamesGroup?.feed.title ?? "", image: #imageLiteral(resourceName: "Image"), description: "", backgroundColor: .systemBackground, cellType: .multiple, apps: gamesGroup?.feed.results ?? []),
                 TodayItem.init(category: "HOLIDAYS", title: "Travel on Budget", image: #imageLiteral(resourceName: "Holiday"), description: "All the tools and apps you need to intelligently organize your life to right way.", backgroundColor: #colorLiteral(red: 0.9834888577, green: 0.9667972922, blue: 0.7200905681, alpha: 1), cellType: .single, apps: [])
             ]
             

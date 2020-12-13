@@ -19,10 +19,10 @@ class AppRowCell: UICollectionViewCell {
     override init(frame: CGRect) {
         super.init(frame: frame)
         
-        contentView.backgroundColor = .white
+        contentView.backgroundColor = .systemBackground
         imageView.constrainWidth(constant: 64)
         imageView.constrainHeight(constant: 64)
-        imageView.backgroundColor = .green
+        imageView.backgroundColor = .secondarySystemFill
         
         getButton.backgroundColor = UIColor(white: 0.95, alpha: 1)
         getButton.constrainWidth(constant: 80)

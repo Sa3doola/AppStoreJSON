@@ -34,7 +34,7 @@ class AppDetailController: BaseListController, UICollectionViewDelegateFlowLayou
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        collectionView.backgroundColor = .white
+        collectionView.backgroundColor = .systemBackground
         
         collectionView.register(AppDetailCell.self, forCellWithReuseIdentifier: detailCellID)
         collectionView.register(PerviewCell.self, forCellWithReuseIdentifier: perviewCellID)

@@ -22,7 +22,7 @@ class AppsPageController: BaseListController, UICollectionViewDelegateFlowLayout
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        collectionView.backgroundColor = .white
+        collectionView.backgroundColor = .systemBackground
         
         collectionView.register(AppsGroupCell.self, forCellWithReuseIdentifier: cellID)
         

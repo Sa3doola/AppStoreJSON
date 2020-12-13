@@ -20,7 +20,7 @@ class PerviewScreenShotController: HorizontalSnappingController, UICollectionVie
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        collectionView.backgroundColor = .white
+        collectionView.backgroundColor = .systemBackground
         collectionView.register(ScreenShotCell.self, forCellWithReuseIdentifier: screenShotID)
         
         collectionView.contentInset = .init(top: 0, left: 16, bottom: 0, right: 16)

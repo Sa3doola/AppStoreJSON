@@ -24,7 +24,7 @@ class AppsSearchController: BaseListController, UICollectionViewDelegateFlowLayo
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        collectionView.backgroundColor = .white
+        collectionView.backgroundColor = .systemBackground
         
         collectionView.register(SearchResultCell.self, forCellWithReuseIdentifier: cellID)
         

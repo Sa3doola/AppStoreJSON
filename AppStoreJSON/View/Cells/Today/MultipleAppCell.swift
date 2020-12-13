@@ -12,8 +12,9 @@ class MultipleAppCell: UICollectionViewCell {
     var app: FeedResult! {
         didSet {
             nameLabel.text = app.name
+            nameLabel.tintColor = .label
             companyName.text = app.artistName
-            
+            companyName.tintColor = .label
             imageView.sd_setImage(with: URL(string: app.artworkUrl100))
         }
     }
@@ -34,11 +35,13 @@ class MultipleAppCell: UICollectionViewCell {
     override init(frame: CGRect) {
         super.init(frame: frame)
         
+        backgroundColor = .systemBackground
+        
         [nameLabel, companyName].forEach{$0.textColor = .label}
         
         imageView.constrainWidth(constant: 64)
         imageView.constrainHeight(constant: 64)
-        imageView.backgroundColor = .green
+        imageView.backgroundColor = .secondarySystemFill
         
         getButton.backgroundColor = UIColor(white: 0.95, alpha: 1)
         getButton.constrainWidth(constant: 80)

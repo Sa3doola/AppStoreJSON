@@ -38,6 +38,8 @@ class AppFullScreenController: UITableViewController {
         
         view.clipsToBounds = true
         
+        view.backgroundColor = .systemBackground
+        
         setupCloseButton()
         
         tableView.tableFooterView = UIView()

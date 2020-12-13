@@ -32,7 +32,7 @@ class BaseTodayCell: UICollectionViewCell {
         
         addSubview(self.backgroundView!)
         self.backgroundView?.fillSuperview()
-        self.backgroundView?.backgroundColor = .white
+        self.backgroundView?.backgroundColor = .systemBackground
         self.backgroundView?.layer.cornerRadius = 16
         
         self.backgroundView?.layer.shadowOpacity = 0.1

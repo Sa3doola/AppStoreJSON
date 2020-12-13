@@ -12,8 +12,9 @@ class TodayMutipleAppCell: BaseTodayCell {
     override var todayItem: TodayItem! {
         didSet {
             categoryLabel.text = todayItem.category
+            categoryLabel.tintColor = .label
             titleLabel.text = todayItem.title
-            
+            titleLabel.tintColor = .label
             mutipleAppsController.apps = todayItem.apps
             mutipleAppsController.collectionView.reloadData()
             backgroundColor = todayItem.backgroundColor
@@ -28,6 +29,8 @@ class TodayMutipleAppCell: BaseTodayCell {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
+        
+        backgroundColor = .systemBackground
         
         layer.cornerRadius = 16
         

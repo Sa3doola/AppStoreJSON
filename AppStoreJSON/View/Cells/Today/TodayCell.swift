@@ -12,14 +12,18 @@ class TodayCell: BaseTodayCell {
     override var todayItem: TodayItem! {
         didSet {
             categoryLabel.text = todayItem.category
+            categoryLabel.tintColor = .label
             titleLabel.text = todayItem.title
+            titleLabel.tintColor = .label
             imageView.image = todayItem.image
             descriptionLabel.text = todayItem.description
+            descriptionLabel.tintColor = .label
             backgroundColor = todayItem.backgroundColor
         }
     }
     
     let categoryLabel = UILabel(text: "Life Better", font: .boldSystemFont(ofSize: 20))
+        
     
     let titleLabel = UILabel(text: "Utilizing your Time", font: .boldSystemFont(ofSize: 28))
     
@@ -33,7 +37,7 @@ class TodayCell: BaseTodayCell {
     override init(frame: CGRect) {
         super.init(frame: frame)
         
-        backgroundColor = .white
+        backgroundColor = .systemBackground
         clipsToBounds = true
         layer.cornerRadius = 16
         

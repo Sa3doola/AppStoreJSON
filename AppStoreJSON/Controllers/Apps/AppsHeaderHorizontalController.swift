@@ -15,7 +15,7 @@ class AppsHeaderHorizontalController: HorizontalSnappingController, UICollection
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        collectionView.backgroundColor = .white
+        collectionView.backgroundColor = .systemBackground
         
         collectionView.register(AppHeaderCell.self, forCellWithReuseIdentifier: cellID)
         
