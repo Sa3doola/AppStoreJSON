@@ -32,7 +32,7 @@ class PerviewScreenShotController: HorizontalSnappingController, UICollectionVie
     
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: screenShotID, for: indexPath) as! ScreenShotCell
-        let url = self.app?.screenshotUrls[indexPath.item]
+        let url = self.app?.screenshotUrls![indexPath.item]
         cell.imageView.sd_setImage(with: URL(string: url ?? ""))
         return cell
     }

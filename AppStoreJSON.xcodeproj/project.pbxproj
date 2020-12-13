@@ -21,6 +21,9 @@
 		D94EF6F5256C956800257111 /* AppFullscreenHeaderCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D94EF6F4256C956800257111 /* AppFullscreenHeaderCell.swift */; };
 		D94EF6F8256C9A2500257111 /* TodayItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = D94EF6F7256C9A2500257111 /* TodayItem.swift */; };
 		D94EF6FE256CA4EB00257111 /* TodayMultipleAppCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D94EF6FD256CA4EB00257111 /* TodayMultipleAppCell.swift */; };
+		D9597509258613DE00A7B14A /* MusicController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9597508258613DE00A7B14A /* MusicController.swift */; };
+		D959750C2586154300A7B14A /* TrackCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D959750B2586154300A7B14A /* TrackCell.swift */; };
+		D959750F2586155900A7B14A /* MusicLoadingFooter.swift in Sources */ = {isa = PBXBuildFile; fileRef = D959750E2586155900A7B14A /* MusicLoadingFooter.swift */; };
 		D95CC139256906A2000B600D /* HorizontalSnappingController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D95CC138256906A2000B600D /* HorizontalSnappingController.swift */; };
 		D95FF03C256ABC6F00C5AC2F /* TodayController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D95FF03B256ABC6F00C5AC2F /* TodayController.swift */; };
 		D95FF041256ABD8800C5AC2F /* TodayCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D95FF040256ABD8800C5AC2F /* TodayCell.swift */; };
@@ -71,6 +74,9 @@
 		D94EF6F4256C956800257111 /* AppFullscreenHeaderCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppFullscreenHeaderCell.swift; sourceTree = "<group>"; };
 		D94EF6F7256C9A2500257111 /* TodayItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodayItem.swift; sourceTree = "<group>"; };
 		D94EF6FD256CA4EB00257111 /* TodayMultipleAppCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodayMultipleAppCell.swift; sourceTree = "<group>"; };
+		D9597508258613DE00A7B14A /* MusicController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MusicController.swift; sourceTree = "<group>"; };
+		D959750B2586154300A7B14A /* TrackCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackCell.swift; sourceTree = "<group>"; };
+		D959750E2586155900A7B14A /* MusicLoadingFooter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MusicLoadingFooter.swift; sourceTree = "<group>"; };
 		D95CC138256906A2000B600D /* HorizontalSnappingController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HorizontalSnappingController.swift; sourceTree = "<group>"; };
 		D95FF03B256ABC6F00C5AC2F /* TodayController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodayController.swift; sourceTree = "<group>"; };
 		D95FF040256ABD8800C5AC2F /* TodayCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodayCell.swift; sourceTree = "<group>"; };
@@ -159,6 +165,14 @@
 			path = Detail;
 			sourceTree = "<group>";
 		};
+		D9597507258613CE00A7B14A /* Music */ = {
+			isa = PBXGroup;
+			children = (
+				D9597508258613DE00A7B14A /* MusicController.swift */,
+			);
+			path = Music;
+			sourceTree = "<group>";
+		};
 		D95FF03A256ABC3C00C5AC2F /* Today */ = {
 			isa = PBXGroup;
 			children = (
@@ -186,6 +200,7 @@
 		D9601661256902F100BDD7F5 /* Cells */ = {
 			isa = PBXGroup;
 			children = (
+				D991AD5225854740005F8959 /* Music */,
 				D95FF03F256ABD6E00C5AC2F /* Today */,
 				D9A13CB7256416B400A817A7 /* Apps */,
 			);
@@ -198,6 +213,15 @@
 				D986F2A42563F0B200995F18 /* Service.swift */,
 			);
 			path = Services;
+			sourceTree = "<group>";
+		};
+		D991AD5225854740005F8959 /* Music */ = {
+			isa = PBXGroup;
+			children = (
+				D959750B2586154300A7B14A /* TrackCell.swift */,
+				D959750E2586155900A7B14A /* MusicLoadingFooter.swift */,
+			);
+			path = Music;
 			sourceTree = "<group>";
 		};
 		D9A13CB42564158900A817A7 /* Apps */ = {
@@ -223,7 +247,6 @@
 			isa = PBXGroup;
 			children = (
 				D93E84DC2569317B00F0C1A2 /* Detail */,
-				D9ABBB67256155DD00D8A421 /* SearchResultCell.swift */,
 				D9A13CB8256416C900A817A7 /* AppsGroupCell.swift */,
 				D9C80F712564303E0003FA0E /* AppRowCell.swift */,
 				D9C80F7825643A3E0003FA0E /* AppsPageHeader.swift */,
@@ -270,6 +293,7 @@
 		D9ABBB65256155A900D8A421 /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				D9597507258613CE00A7B14A /* Music */,
 				D95FF03A256ABC3C00C5AC2F /* Today */,
 				D9A13CB52564158E00A817A7 /* Search */,
 				D9A13CB42564158900A817A7 /* Apps */,
@@ -283,6 +307,7 @@
 		D9ABBB66256155B900D8A421 /* View */ = {
 			isa = PBXGroup;
 			children = (
+				D9ABBB67256155DD00D8A421 /* SearchResultCell.swift */,
 				D9601661256902F100BDD7F5 /* Cells */,
 			);
 			path = View;
@@ -443,6 +468,7 @@
 				D9B2B5A4256D4E20009E0724 /* BaseTodayCell.swift in Sources */,
 				D9A13CAF2564125D00A817A7 /* AppsPageController.swift in Sources */,
 				D9C80F82256449340003FA0E /* AppGroup.swift in Sources */,
+				D959750F2586155900A7B14A /* MusicLoadingFooter.swift in Sources */,
 				D95FF045256AD98200C5AC2F /* AppFullScreenController.swift in Sources */,
 				D95FF041256ABD8800C5AC2F /* TodayCell.swift in Sources */,
 				D9C80F75256430E40003FA0E /* Extentions.swift in Sources */,
@@ -458,8 +484,10 @@
 				D93E84DE2569319100F0C1A2 /* AppDetailCell.swift in Sources */,
 				D93E84F3256977D900F0C1A2 /* PerviewScreenShotController.swift in Sources */,
 				D9A13CB2256414D400A817A7 /* BaseListController.swift in Sources */,
+				D9597509258613DE00A7B14A /* MusicController.swift in Sources */,
 				D9C80F722564303E0003FA0E /* AppRowCell.swift in Sources */,
 				D9ABBB4E2561523100D8A421 /* SceneDelegate.swift in Sources */,
+				D959750C2586154300A7B14A /* TrackCell.swift in Sources */,
 				D9C80F7925643A3E0003FA0E /* AppsPageHeader.swift in Sources */,
 				D900DCD72569D35900648EF7 /* ReviewsController.swift in Sources */,
 				D9A13CB9256416C900A817A7 /* AppsGroupCell.swift in Sources */,

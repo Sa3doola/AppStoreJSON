@@ -7,7 +7,7 @@
 
 import UIKit
 
-class TodayController: BaseListController, UICollectionViewDelegateFlowLayout {
+class TodayController: BaseListController, UICollectionViewDelegateFlowLayout, UIGestureRecognizerDelegate {
     
     var items = [TodayItem]()
     
@@ -25,13 +25,21 @@ class TodayController: BaseListController, UICollectionViewDelegateFlowLayout {
         tabBarController?.tabBar.superview?.setNeedsLayout()
     }
     
+    let blurVisualEffectView = UIVisualEffectView(effect: UIBlurEffect(style: .regular))
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        view.addSubview(blurVisualEffectView)
+        blurVisualEffectView.fillSuperview()
+        blurVisualEffectView.alpha = 0
         
         view.addSubview(activityInddicatorView)
         activityInddicatorView.centerInSuperview()
         
         fetchData()
+        
+        navigationController?.isNavigationBarHidden = true
         
         collectionView.backgroundColor = .secondarySystemBackground
         
@@ -75,117 +83,128 @@ class TodayController: BaseListController, UICollectionViewDelegateFlowLayout {
         }
     }
     
-    override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return items.count
-    }
-    
-    override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        
-        let cellID = items[indexPath.item].cellType.rawValue
-        
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellID, for: indexPath) as! BaseTodayCell
-        
-        cell.todayItem = items[indexPath.item]
-        
-        (cell as? TodayMutipleAppCell)?.mutipleAppsController.collectionView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleMulipleAppsTap)))
-        
-        return cell
-    }
-    
-    @objc fileprivate func handleMulipleAppsTap(gesture: UIGestureRecognizer) {
-        
-        let collectionView = gesture.view
-        var superView = collectionView?.superview
-        
-        while superView != nil {
-            if let cell = superView as? TodayMutipleAppCell {
-                guard let indexPath = self.collectionView.indexPath(for: cell) else { return }
-                
-                let apps = self.items[indexPath.item].apps
-                
-                let fullController = TodayMultipleAppsController(mode: .fullScreen)
-                fullController.modalPresentationStyle = .fullScreen
-                fullController.apps = apps
-                present(fullController, animated: true)
-                
-            }
-            
-            superView = superView?.superview
-        }
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return .init(width: view.frame.width - 64, height: 500)
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
-        return 32
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
-        return .init(top: 24, left: 0, bottom: 24, right: 0)
-    }
-    
     var appFullscreenController: AppFullScreenController!
     
-    var topConstraint: NSLayoutConstraint?
-    var leadingConstraint: NSLayoutConstraint?
-    var widthConstraint: NSLayoutConstraint?
-    var heightConstraint: NSLayoutConstraint?
+    fileprivate func showDailyListFullScreen(_ indexpath: IndexPath) {
+        
+        let fullController = TodayMultipleAppsController(mode: .fullScreen)
+        fullController.apps = self.items[indexpath.item].apps
+        let navVC = BackEnableNavigationController(rootViewController: fullController)
+        navVC.modalPresentationStyle = .fullScreen
+        present(navVC, animated: true)
+    }
+    
     
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        switch items[indexPath.item].cellType {
+        case .multiple:
+            showDailyListFullScreen(indexPath)
+        default:
+            showSingleAppFullscreen(indexPath: indexPath)
+        }
+    }
+    
+    fileprivate func setupSingleAppFullscreenController(_ indexpath: IndexPath) {
+        navigationController?.navigationBar.isHidden = true
         
-        if items[indexPath.item].cellType == .multiple {
-            let fullController = TodayMultipleAppsController(mode: .fullScreen)
-            fullController.apps = self.items[indexPath.item].apps
-            let navVC = BackEnableNavigationController(rootViewController: fullController)
-            navVC.modalPresentationStyle = .fullScreen
-            present(navVC, animated: true)
+        let appFulscreenController = AppFullScreenController()
+        appFulscreenController.todayItem = items[indexpath.item]
+        appFulscreenController.dismisshandler = {
+            self.navigationController?.navigationBar.isHidden = false
+           // self.handleAppFullscreenDismissal()
+        }
+        
+        appFulscreenController.view.layer.cornerRadius = 16
+        self.appFullscreenController = appFulscreenController
+        
+        // #1 setup our pan gesture
+        let gesture = UIPanGestureRecognizer(target: self, action: #selector(handleDrag))
+        gesture.delegate = self
+        appFulscreenController.view.addGestureRecognizer(gesture)
+    }
+    
+    
+    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+        return true
+    }
+    
+    var appFullscreenBeginOffset: CGFloat = 0
+    
+    @objc fileprivate func handleDrag(gesture: UIPanGestureRecognizer) {
+        if gesture.state == .began {
+            appFullscreenBeginOffset = appFullscreenController.tableView.contentOffset.y
+        }
+        
+        if appFullscreenController.tableView.contentOffset.y > 0 {
             return
         }
-    
-        let appFullscreenController = AppFullScreenController()
-        appFullscreenController.todayItem = items[indexPath.item]
-        appFullscreenController.dismisshandler = {
-            self.handelRemoveFullscreen()
+        
+        let tranlationY = gesture.translation(in: appFullscreenController.view).y
+        
+        if gesture.state == .changed {
+            if tranlationY > 0 {
+                let trueOffset = tranlationY - appFullscreenBeginOffset
+                var scale = 1 - trueOffset / 1000
+                
+                scale = min(1, scale)
+                scale = max(0.5, scale)
+                
+                let transform: CGAffineTransform = .init(scaleX: scale, y: scale)
+                self.appFullscreenController.view.transform = transform
+            }
+        } else if gesture.state == .ended {
+            if tranlationY > 0 {
+                handleAppFullscreenDismissal()
+            }
         }
-        let fullscreenView = appFullscreenController.view!
-        fullscreenView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handelRemoveFullscreen)))
-        view.addSubview(fullscreenView)
+    }
+    
+    var startingFrame: CGRect?
+    
+    fileprivate func setupStartingCellFrame(_ indexPath: IndexPath) {
+        guard let cell = collectionView.cellForItem(at: indexPath) else { return }
+        
+        guard let startingFrame = cell.superview?.convert(cell.frame, to: nil) else { return }
+        
+        self.startingFrame =  startingFrame
+    }
+    
+    var anchoredConstraints: AnchoredConstraints?
+    
+    fileprivate func setupAppFullscreenStartingPostion(_ indexPath: IndexPath) {
+        let fullScreenView = appFullscreenController.view!
+        view.addSubview(fullScreenView)
         
         addChild(appFullscreenController)
         
-        self.appFullscreenController = appFullscreenController
-        
         self.collectionView.isUserInteractionEnabled = false
         
-        guard let cell = collectionView.cellForItem(at: indexPath) else { return }
-        // absolute coordindates of cell
-        guard let startingFrame = cell.superview?.convert(cell.frame, to: nil) else { return }
-        self.startingFrame = startingFrame
+        setupStartingCellFrame(indexPath)
         
-        fullscreenView.translatesAutoresizingMaskIntoConstraints = false
-        topConstraint = fullscreenView.topAnchor.constraint(equalTo: view.topAnchor, constant: startingFrame.origin.y)
-        leadingConstraint = fullscreenView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: startingFrame.origin.x)
-        widthConstraint = fullscreenView.widthAnchor.constraint(equalToConstant: startingFrame.width)
-        heightConstraint = fullscreenView.heightAnchor.constraint(equalToConstant: startingFrame.height)
+        guard let startingFrame = self.startingFrame else { return }
         
-        [topConstraint, leadingConstraint, widthConstraint, heightConstraint].forEach({$0?.isActive = true})
+        // auto layout constraint animations
+        
+        self.anchoredConstraints = fullScreenView.anchor(top: view.topAnchor, leading: view.leadingAnchor, bottom: nil, trailing: nil, padding: .init(top: startingFrame.origin.y, left: startingFrame.origin.x, bottom: 0, right: 0), size: .init(width: startingFrame.width, height: startingFrame.height))
         
         self.view.layoutIfNeeded()
-        
-        fullscreenView.layer.cornerRadius = 16
-        
+    }
+    
+    fileprivate func beginAnimationAppFullscreen() {
         UIView.animate(withDuration: 0.7, delay: 0, usingSpringWithDamping: 0.7, initialSpringVelocity: 0.7, options: .curveEaseOut, animations: {
             
-            self.topConstraint?.constant = 0
-            self.leadingConstraint?.constant = 0
-            self.widthConstraint?.constant = self.view.frame.width
-            self.heightConstraint?.constant = self.view.frame.height
+            self.blurVisualEffectView.alpha = 1
             
-            self.view.layoutIfNeeded()
+            self.anchoredConstraints?.top?.constant = 0
+            self.anchoredConstraints?.leading?.constant = 0
+            self.anchoredConstraints?.width?.constant = self.view.frame.width
+            self.anchoredConstraints?.height?.constant = self.view.frame.height
             
-            guard let cell = self.appFullscreenController.tableView.cellForRow(at: [0,0]) as? AppFullscreenHeaderCell else { return }
+            self.view.layoutIfNeeded() // starts animation
+            
+            self.tabBarController?.tabBar.frame.origin.y = self.view.frame.size.height
+            
+            guard let cell = self.appFullscreenController.tableView.cellForRow(at: [0, 0]) as? AppFullscreenHeaderCell else { return }
             
             cell.todayCell.topConstraint?.constant = 48
             cell.layoutIfNeeded()
@@ -193,26 +212,40 @@ class TodayController: BaseListController, UICollectionViewDelegateFlowLayout {
         }, completion: nil)
     }
     
-    var startingFrame: CGRect?
-    
-    @objc func handelRemoveFullscreen() {
+    fileprivate func showSingleAppFullscreen(indexPath: IndexPath) {
+        // #1
+        setupSingleAppFullscreenController(indexPath)
         
-        // access starting frame
+        // #2 setup fullscreen in its starting position
+        setupAppFullscreenStartingPostion(indexPath)
+        
+        // #3 begin the fullscreen animation
+        beginAnimationAppFullscreen()
+    }
+    
+    @objc func handleAppFullscreenDismissal() {
         UIView.animate(withDuration: 0.7, delay: 0, usingSpringWithDamping: 0.7, initialSpringVelocity: 0.7, options: .curveEaseOut, animations: {
+            
+            self.blurVisualEffectView.alpha = 0
+            self.appFullscreenController.view.transform = .identity
             
             self.appFullscreenController.tableView.contentOffset = .zero
             
             guard let startingFrame = self.startingFrame else { return }
-            
-            self.topConstraint?.constant = startingFrame.origin.y
-            self.leadingConstraint?.constant = startingFrame.origin.x
-            self.widthConstraint?.constant = startingFrame.width
-            self.heightConstraint?.constant = startingFrame.height
+            self.anchoredConstraints?.top?.constant = startingFrame.origin.y
+            self.anchoredConstraints?.leading?.constant = startingFrame.origin.x
+            self.anchoredConstraints?.width?.constant = startingFrame.width
+            self.anchoredConstraints?.height?.constant = startingFrame.height
             
             self.view.layoutIfNeeded()
             
-            guard let cell = self.appFullscreenController.tableView.cellForRow(at: [0,0]) as? AppFullscreenHeaderCell else { return }
+            if let tabBarFrame = self.tabBarController?.tabBar.frame {
+                self.tabBarController?.tabBar.frame.origin.y = self.view.frame.size.height - tabBarFrame.height
+            }
             
+            guard let cell = self.appFullscreenController.tableView.cellForRow(at: [0, 0]) as? AppFullscreenHeaderCell else { return }
+            
+            self.appFullscreenController.closeButton.alpha = 0
             cell.todayCell.topConstraint?.constant = 24
             cell.layoutIfNeeded()
             
@@ -222,4 +255,63 @@ class TodayController: BaseListController, UICollectionViewDelegateFlowLayout {
             self.collectionView.isUserInteractionEnabled = true
         })
     }
+    
+    override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return items.count
+    }
+    
+    override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        
+        let cellID = items[indexPath.item].cellType.rawValue
+        
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellID, for: indexPath) as! BaseTodayCell
+        cell.todayItem = items[indexPath.item]
+        
+        (cell as? TodayMutipleAppCell)?.mutipleAppsController.collectionView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleMultipleAppTap)))
+        
+        return cell
+    }
+    
+    @objc fileprivate func handleMultipleAppTap(gesture: UIGestureRecognizer) {
+        
+        let collectionView = gesture.view
+        
+        // figure out which cell were clicking into
+        
+        var superview = collectionView?.superview
+        
+        while superview != nil {
+            if let cell = superview as? TodayMutipleAppCell {
+                guard let indexPath = self.collectionView.indexPath(for: cell) else { return }
+                let apps = self.items[indexPath.item].apps
+                
+                let fullController = TodayMultipleAppsController(mode: .fullScreen)
+                fullController.apps = apps
+                let navVC = BackEnableNavigationController(rootViewController: fullController)
+                navVC.modalPresentationStyle = .fullScreen
+                
+                present(navVC, animated: true)
+                
+                return
+            }
+            
+            superview = superview?.superview
+        }
+    }
+    
+    static let cellSize: CGFloat = 500
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        return .init(width: view.frame.width - 64 , height: TodayController.cellSize)
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
+        return 32
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
+        return .init(top: 32, left: 0, bottom: 32, right: 0)
+    }
+            
+   
 }

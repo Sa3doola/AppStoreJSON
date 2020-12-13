@@ -5,11 +5,11 @@
 //  Created by Saad Sherif on 11/17/20.
 //
 
-import Foundation
+import UIKit
 
 class Service {
     
-    static let shared = Service()
+    static let shared = Service() // singleton
     
     func fetchApp(searchItem: String, completion: @escaping (SearchResult?, Error?) -> ()) {
         
@@ -36,6 +36,7 @@ class Service {
         fetchAppGroup(urlString: urlString, completion: completion)
     }
     
+    // helper
     func fetchAppGroup(urlString: String, completion: @escaping
                         (AppGroup?, Error?) -> Void) {
         
@@ -67,6 +68,21 @@ class Service {
             }
         }.resume()
     }
+}
+
+class Stack<T: Codable> {
+    var items = [T]()
+    func push(item: T) { items.append(item) }
+    func pop() -> T? { return items.last}
+}
+
+func dummyFunc() {
+    
+    let stackOfStrings = Stack<String>()
+    stackOfStrings.push(item: "HAS TO BE STRING")
+    
+    let stackOfInts = Stack<Int>()
+    stackOfInts.push(item: 1)
 }
 
 

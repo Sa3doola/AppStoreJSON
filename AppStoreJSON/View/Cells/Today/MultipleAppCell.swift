@@ -27,14 +27,15 @@ class MultipleAppCell: UICollectionViewCell {
     
     let separatorView: UIView = {
         let view = UIView()
-        view.backgroundColor = UIColor(white: 0.4, alpha: 0.4)
+        view.backgroundColor = UIColor(white: 0.3, alpha: 0.3)
         return view
     }()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
         
-        contentView.backgroundColor = .white
+        [nameLabel, companyName].forEach{$0.textColor = .label}
+        
         imageView.constrainWidth(constant: 64)
         imageView.constrainHeight(constant: 64)
         imageView.backgroundColor = .green
@@ -45,7 +46,7 @@ class MultipleAppCell: UICollectionViewCell {
         getButton.titleLabel?.font = .boldSystemFont(ofSize: 16)
         getButton.layer.cornerRadius = 16
         
-        let stackView = UIStackView(arrangedSubviews: [imageView, VerticalStackView(arrangedSubViews: [nameLabel, companyName], spacing: 5), getButton])
+        let stackView = UIStackView(arrangedSubviews: [imageView, VerticalStackView(arrangedSubViews: [nameLabel, companyName], spacing: 4), getButton])
         stackView.spacing = 16
         stackView.alignment = .center
         
